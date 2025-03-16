@@ -1,0 +1,228 @@
+@import '../_variables.scss';
+
+.mailing-list-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: rgba($purple, 0.05);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: all 0.3s ease;
+
+  .mailing-list-title {
+    color: $purple;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    
+    @media (max-width: 768px) {
+      font-size: 1.8rem;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  .mailing-list-description {
+    color: #333;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    font-size: 1rem;
+    
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .mauticform_wrapper {
+    width: 100%;
+    
+    .mauticform-innerform {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .mauticform-page-wrapper {
+      width: 100%;
+    }
+    
+    .mauticform-row {
+      margin-bottom: 1.5rem;
+      width: 100%;
+      
+      &.mauticform-email {
+        margin-bottom: 1.5rem;
+      }
+    }
+    
+    .mauticform-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #333;
+      text-align: left;
+      
+      @media (max-width: 480px) {
+        font-size: 0.9rem;
+      }
+    }
+    
+    .mauticform-helpmessage {
+      display: none; // Hide the default help message
+    }
+    
+    .mauticform-input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 2px solid rgba($purple, 0.3);
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      
+      &:focus {
+        outline: none;
+        border-color: $purple;
+        box-shadow: 0 0 0 3px rgba($purple, 0.2);
+      }
+      
+      &::placeholder {
+        color: #999;
+      }
+      
+      @media (max-width: 480px) {
+        padding: 0.7rem 0.8rem;
+        font-size: 0.9rem;
+      }
+    }
+    
+    .mauticform-button-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .mauticform-button {
+      background-color: $purple;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background-color: darken($purple, 10%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      &:active {
+        transform: translateY(0);
+      }
+      
+      @media (max-width: 480px) {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+      }
+    }
+    
+    .mauticform-errormsg {
+      color: #e74c3c;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      text-align: left;
+    }
+    
+    .mauticform-message {
+      margin: 1rem 0;
+      padding: 0.8rem;
+      border-radius: 5px;
+      
+      &:not(:empty) {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+    }
+    
+    .mauticform-error {
+      margin: 1rem 0;
+      padding: 0.8rem;
+      border-radius: 5px;
+      
+      &:not(:empty) {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+    }
+  }
+  
+  // Loading placeholder styling
+  .loading-placeholder {
+    width: 100%;
+    
+    .form-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      
+      .input-placeholder {
+        width: 100%;
+        height: 50px;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading-pulse 1.5s infinite;
+        border-radius: 5px;
+        margin-bottom: 1.5rem;
+      }
+      
+      .button-placeholder {
+        width: 150px;
+        height: 45px;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading-pulse 1.5s infinite;
+        border-radius: 5px;
+      }
+    }
+  }
+}
+
+@keyframes loading-pulse {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .mailing-list-container {
+    padding: 1.5rem;
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 576px) {
+  .mailing-list-container {
+    padding: 1.25rem;
+    max-width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .mailing-list-container {
+    padding: 1rem;
+  }
+}

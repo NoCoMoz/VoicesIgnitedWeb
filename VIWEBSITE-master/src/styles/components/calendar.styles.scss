@@ -1,0 +1,661 @@
+@import '../_variables.scss';
+
+.calendar-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+  font-family: 'Open Sans', sans-serif;
+  
+  .calendar-header {
+    margin-bottom: 1.5rem;
+    
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: $purple;
+    }
+    
+    .calendar-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+      
+      @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .calendar-nav {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        
+        h3 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0;
+          min-width: 180px;
+          text-align: center;
+        }
+        
+        .btn-calendar {
+          background-color: #f5f5f5;
+          border: none;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background-color 0.2s;
+          
+          &:hover {
+            background-color: #e0e0e0;
+          }
+          
+          i {
+            color: #333;
+          }
+        }
+      }
+      
+      .calendar-filter {
+        display: flex;
+        gap: 0.5rem;
+        
+        select {
+          padding: 0.5rem;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 0.9rem;
+          background-color: white;
+          min-width: 150px;
+          
+          &:focus {
+            outline: 2px solid $purple;
+            border-color: $purple;
+          }
+        }
+      }
+    }
+  }
+  
+  // Error handling styles
+  .calendar-error-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    
+    .calendar-error-message {
+      color: #d32f2f;
+      font-size: 1rem;
+      font-weight: 500;
+      margin: 0;
+      padding: 1rem;
+      background-color: rgba(211, 47, 47, 0.1);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100px;
+    }
+  }
+  
+  .calendar-error {
+    color: #d32f2f;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+    padding: 1rem;
+    background-color: rgba(211, 47, 47, 0.05);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+    grid-column: 1 / -1;
+  }
+  
+  .calendar-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(7, minmax(40px, 1fr));
+      }
+      
+      @media (max-width: 480px) {
+        font-size: 0.8rem;
+      }
+      
+      .calendar-day-header {
+        background-color: #f8f8f8;
+        font-weight: 600;
+        text-align: center;
+        padding: 1rem 0.5rem;
+        border-bottom: 1px solid #eee;
+      }
+      
+      .calendar-day {
+        min-height: 100px;
+        padding: 0.5rem;
+        border-bottom: 1px solid #eee;
+        border-right: 1px solid #eee;
+        position: relative;
+        
+        @media (max-width: 768px) {
+          min-height: 80px;
+        }
+        
+        @media (max-width: 480px) {
+          min-height: 60px;
+          padding: 0.3rem;
+        }
+        
+        &:nth-child(7n) {
+          border-right: none;
+        }
+        
+        &.inactive {
+          background-color: #f9f9f9;
+          color: #aaa;
+        }
+        
+        &.today {
+          background-color: rgba($purple, 0.05);
+          
+          .day-number {
+            background-color: $purple;
+            color: white;
+          }
+        }
+        
+        .day-number {
+          position: absolute;
+          top: 0.3rem;
+          right: 0.3rem;
+          width: 25px;
+          height: 25px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          font-size: 0.9rem;
+          border-radius: 50%;
+          
+          @media (max-width: 480px) {
+            width: 20px;
+            height: 20px;
+            font-size: 0.8rem;
+          }
+        }
+        
+        .day-events {
+          margin-top: 1.5rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.3rem;
+          
+          .day-event {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: transform 0.2s;
+            
+            @media (max-width: 480px) {
+              font-size: 0.7rem;
+              padding: 0.2rem 0.4rem;
+            }
+            
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            
+            &.meeting {
+              background-color: #e3f2fd;
+              border-left: 3px solid #2196f3;
+            }
+            
+            &.workshop {
+              background-color: #e8f5e9;
+              border-left: 3px solid #4caf50;
+            }
+            
+            &.action {
+              background-color: #ffebee;
+              border-left: 3px solid #f44336;
+            }
+            
+            &.fundraiser {
+              background-color: #fff8e1;
+              border-left: 3px solid #ffc107;
+            }
+            
+            &.social {
+              background-color: #f3e5f5;
+              border-left: 3px solid $purple;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      
+      .legend-color {
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+        
+        &.meeting {
+          background-color: #2196f3;
+        }
+        
+        &.workshop {
+          background-color: #4caf50;
+        }
+        
+        &.action {
+          background-color: #f44336;
+        }
+        
+        &.fundraiser {
+          background-color: #ffc107;
+        }
+        
+        &.social {
+          background-color: $purple;
+        }
+      }
+    }
+  }
+}
+
+// Loading state
+.calendar-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  
+  p {
+    font-size: 16px;
+    color: #666;
+  }
+}
+
+// Retry button
+.btn-retry {
+  background-color: #8034eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  
+  &:hover {
+    background-color: #662ebf;
+  }
+}
+
+// Modal styles for event details
+.event-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  
+  .event-modal-content {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem;
+    position: relative;
+    
+    .close-modal {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      
+      &:hover {
+        color: $purple;
+      }
+    }
+    
+    .event-type-badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+      color: white;
+      
+      &.meeting {
+        background-color: #2196f3;
+      }
+      
+      &.workshop {
+        background-color: #4caf50;
+      }
+      
+      &.action {
+        background-color: #f44336;
+      }
+      
+      &.fundraiser {
+        background-color: #ffc107;
+        color: #333;
+      }
+      
+      &.social {
+        background-color: $purple;
+      }
+    }
+    
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: $purple;
+    }
+    
+    .event-details {
+      margin-bottom: 1.5rem;
+      
+      p {
+        margin-bottom: 0.5rem;
+      }
+      
+      .event-description {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+      }
+      
+      .event-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+        
+        .meta-item {
+          display: flex;
+          align-items: center;
+          gap: 0.3rem;
+          
+          i, svg {
+            color: $purple;
+            width: 16px;
+          }
+          
+          a {
+            color: $purple;
+            text-decoration: none;
+            
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+      
+      .event-image {
+        margin-top: 1.5rem;
+        
+        img {
+          width: 100%;
+          max-height: 300px;
+          object-fit: cover;
+          border-radius: 4px;
+        }
+      }
+    }
+    
+    .event-buttons {
+      display: flex;
+      gap: 1rem;
+      
+      button {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s;
+        
+        &.btn-register {
+          background-color: $purple;
+          color: white;
+          
+          &:hover {
+            background-color: darken($purple, 10%);
+          }
+        }
+        
+        &.btn-secondary {
+          background-color: #f5f5f5;
+          color: #333;
+          
+          &:hover {
+            background-color: #e0e0e0;
+          }
+        }
+      }
+      
+      @media (max-width: 480px) {
+        flex-direction: column;
+        
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+// Add button styling
+.btn-add-event {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #8034eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-left: 10px;
+  
+  &:hover {
+    background-color: #662ebf;
+  }
+  
+  svg {
+    margin-right: 6px;
+  }
+  
+  @media (max-width: 768px) {
+    margin-top: 10px;
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+// Event form styles
+.event-form-content {
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 25px;
+}
+
+.event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    
+    label {
+      font-weight: 600;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+    
+    input, select, textarea {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      
+      &.error {
+        border-color: #ff3b30;
+      }
+      
+      &:focus {
+        outline: none;
+        border-color: #8034eb;
+        box-shadow: 0 0 0 2px rgba(128, 52, 235, 0.2);
+      }
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    
+    .error-message {
+      color: #ff3b30;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 15px;
+    
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .form-group {
+      flex: 1;
+    }
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+    
+    button {
+      padding: 10px 16px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &.btn-submit {
+        background-color: #8034eb;
+        color: white;
+        border: none;
+        
+        &:hover {
+          background-color: #662ebf;
+        }
+      }
+      
+      &.btn-cancel {
+        background-color: transparent;
+        color: #333;
+        border: 1px solid #ddd;
+        
+        &:hover {
+          background-color: #f5f5f5;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .event-form-content {
+    width: 90%;
+    padding: 15px;
+  }
+  
+  .calendar-controls {
+    flex-direction: column;
+    
+    .calendar-filter {
+      margin-top: 15px;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      
+      select {
+        width: calc(50% - 5px);
+        margin-right: 0;
+      }
+    }
+  }
+}

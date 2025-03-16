@@ -1,0 +1,539 @@
+@import "../_variables.scss";
+
+.events-container {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #3f2a56; // Purple background color matching the brand
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 4rem;
+  overflow-x: hidden; // Prevent horizontal scrolling on mobile
+}
+
+.events-hero {
+  width: 100%;
+  padding: 8rem 2rem 4rem;
+  text-align: center;
+  background: linear-gradient(to bottom, rgba(63, 42, 86, 0.9), rgba(63, 42, 86, 1));
+  
+  h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  p {
+    font-size: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+  
+  // Add animation for better UX
+  animation: fadeIn 0.8s ease-in-out;
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+.events-content {
+  width: 100%;
+  max-width: 1200px;
+  padding: 2rem;
+  background-color: white;
+  color: #333;
+  border-radius: 8px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.events-info {
+  margin-top: 3rem;
+  padding: 2rem;
+  background-color: rgba(123, 44, 191, 0.05);
+  border-radius: 8px;
+  
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: $purple;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 800px;
+    margin-bottom: 2rem;
+  }
+  
+  .event-cta {
+    display: flex;
+    gap: 1rem;
+    
+    a {
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-block;
+      
+      &.btn-primary {
+        background-color: $purple;
+        color: white;
+        
+        &:hover {
+          background-color: darken($purple, 10%);
+          transform: translateY(-2px);
+        }
+      }
+      
+      &.btn-secondary {
+        background-color: transparent;
+        border: 2px solid $purple;
+        color: $purple;
+        
+        &:hover {
+          background-color: rgba($purple, 0.1);
+          transform: translateY(-2px);
+        }
+      }
+    }
+    
+    button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      
+      &.btn-primary {
+        background-color: $purple;
+        color: white;
+        
+        &:hover {
+          background-color: darken($purple, 10%);
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+}
+
+// Upcoming Events Section
+.upcoming-events-section {
+  padding: 3rem 0;
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: $purple;
+      margin: 0;
+    }
+    
+    .scroll-controls {
+      display: flex;
+      gap: 0.5rem;
+      
+      .scroll-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: white;
+        border: 2px solid $purple;
+        color: $purple;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          background-color: $purple;
+          color: white;
+          transform: translateY(-2px);
+        }
+        
+        svg {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+  
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: $purple;
+    text-align: center;
+    
+    &:after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background-color: $purple;
+      margin: 0.5rem auto 0;
+    }
+  }
+  
+  .upcoming-events-grid {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem 0;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: $purple;
+      border-radius: 4px;
+    }
+  }
+  
+  .no-events-message {
+    text-align: center;
+    padding: 2.5rem 1.25rem;
+    background-color: #f9f6fc;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    
+    p {
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+  }
+  
+  .view-more-container {
+    text-align: center;
+    margin-top: 1rem;
+    
+    .btn-view-more {
+      background-color: transparent;
+      color: $purple;
+      border: 2px solid $purple;
+      border-radius: 4px;
+      padding: 0.5rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: $purple;
+        color: white;
+        transform: translateY(-2px);
+      }
+    }
+  }
+}
+
+// Event Card Styling
+.event-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  min-width: 300px;
+  max-width: 300px;
+  flex: 0 0 auto;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  .event-card-image {
+    height: 160px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    
+    &.event-card-image-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.8);
+      
+      &.meeting { background-color: #3498db; }
+      &.workshop { background-color: #2ecc71; }
+      &.action { background-color: #e74c3c; }
+      &.fundraiser { background-color: #f1c40f; }
+      &.social { background-color: $purple; }
+      &.default { background-color: #95a5a6; }
+    }
+  }
+  
+  .event-card-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 1rem;
+    position: relative;
+  }
+  
+  .event-card-type {
+    position: absolute;
+    top: -0.75rem;
+    left: 1rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: white;
+    
+    &.meeting { background-color: #3498db; }
+    &.workshop { background-color: #2ecc71; }
+    &.action { background-color: #e74c3c; }
+    &.fundraiser { background-color: #f1c40f; }
+    &.social { background-color: $purple; }
+    &.default { background-color: #95a5a6; }
+  }
+  
+  .event-card-title {
+    margin: 1rem 0 0.75rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.3;
+  }
+  
+  .event-card-details {
+    margin-bottom: 0.75rem;
+    
+    .event-card-detail {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      color: #666;
+      
+      svg {
+        margin-right: 0.5rem;
+        color: $purple;
+        width: 1rem;
+      }
+    }
+  }
+  
+  .event-card-description {
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+  }
+  
+  .event-card-footer {
+    margin-top: auto;
+    
+    .btn-share {
+      background-color: transparent;
+      color: $purple;
+      border: 2px solid $purple;
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      svg {
+        margin-right: 0.5rem;
+      }
+      
+      &:hover {
+        background-color: $purple;
+        color: white;
+      }
+    }
+  }
+}
+
+// Responsive styles with multiple breakpoints
+@media (max-width: 992px) {
+  .events-hero {
+    padding: 7.5rem 1.5rem 3.5rem;
+    
+    h1 {
+      font-size: 3.5rem;
+    }
+    
+    p {
+      font-size: 1.4rem;
+      max-width: 700px;
+    }
+  }
+  
+  .events-content {
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+  
+  .events-info {
+    padding: 1.5rem;
+    
+    h2 {
+      font-size: 1.8rem;
+    }
+    
+    p {
+      font-size: 1rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .events-hero {
+    padding: 7rem 1rem 3rem;
+    
+    h1 {
+      font-size: 3rem;
+    }
+    
+    p {
+      font-size: 1.2rem;
+      max-width: 600px;
+    }
+  }
+  
+  .events-content {
+    margin: 0 1rem;
+    padding: 1.5rem;
+  }
+  
+  .events-info {
+    padding: 1.25rem;
+    
+    .event-cta {
+      flex-direction: column;
+      
+      a {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+  
+  .upcoming-events-section {
+    .upcoming-events-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .event-card {
+    .event-card-image {
+      height: 140px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .events-container {
+    padding-bottom: 3rem;
+  }
+  
+  .events-hero {
+    padding: 6rem 1rem 2.5rem;
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    p {
+      font-size: 1.1rem;
+      line-height: 1.4;
+    }
+  }
+  
+  .events-content {
+    padding: 1.25rem;
+    border-radius: 6px;
+  }
+  
+  .events-info {
+    margin-top: 2rem;
+    
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .events-hero {
+    padding: 5.5rem 0.75rem 2rem;
+    
+    h1 {
+      font-size: 2rem;
+    }
+    
+    p {
+      font-size: 1rem;
+      padding: 0 0.5rem;
+    }
+  }
+  
+  .events-content {
+    margin: 0 0.75rem;
+    padding: 1rem;
+  }
+  
+  .events-info {
+    padding: 1rem;
+    
+    p {
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+}

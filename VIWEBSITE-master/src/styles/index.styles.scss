@@ -1,0 +1,49 @@
+@import './_variables.scss';
+
+.page {
+  .body-home {
+    position: relative;
+    
+    // Hero section with background image
+    &::before {
+      content: "";
+      background-image: linear-gradient(
+          rgba(0, 0, 0, 0.434),
+          rgba(255, 255, 255, 0.1)
+        ),
+        url("../../public/Images/Designer.jpeg");
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+    
+    // BlueSky feed section
+    .bluesky-section {
+      padding: 0 0 4rem;
+      margin-top: 25rem; // Further reduced to move it up more
+      margin-bottom: 4rem;
+      background: rgba(47, 26, 71, 0.95); // Deeper purple background to match the site's color scheme
+      position: relative;
+      z-index: 1;
+      width: 100%;
+
+      .container {
+        max-width: 100%;
+        padding: 0 1rem;
+        margin: 0 auto;
+      }
+
+      @media (max-width: 768px) {
+        padding: 0 0 3rem;
+        margin-top: 22rem; // Adjusted for mobile to maintain proportional spacing
+        margin-bottom: 3rem;
+      }
+    }
+  }
+}

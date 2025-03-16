@@ -1,0 +1,49 @@
+// Colors
+$primary-white: #ffffff;
+$primary-black: #000000;
+$primary-button-color: #c6953b;
+$purple: #7b2cbf;
+
+// Theme colors
+$primary-color: $primary-button-color;
+$primary-color-light: lighten($primary-color, 15%);
+$secondary-color: $purple;
+$accent-color: $secondary-color;
+$error-color: #dc3545;
+$success-color: #28a745;
+$warning-color: #ffc107;
+
+// Text colors
+$text-primary: $primary-white;
+$text-secondary: rgba($primary-white, 0.7);
+$text-light: $primary-white;
+
+// Breakpoints
+$mobile: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+
+// Typography
+$font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+$font-size-base: 1rem;
+$font-size-lg: 1.25rem;
+$font-size-sm: 0.875rem;
+$line-height-base: 1.5;
+
+// Spacing
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+
+// Borders
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+$border-radius-xl: 16px;
+
+// Transitions
+$transition-fast: all 0.2s ease;
+$transition-base: all 0.3s ease;
+$transition-slow: all 0.4s ease;

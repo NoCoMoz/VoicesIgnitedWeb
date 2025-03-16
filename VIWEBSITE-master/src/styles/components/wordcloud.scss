@@ -1,0 +1,83 @@
+/* Word cloud component styles */
+
+.word-cloud-container {
+  position: relative;
+  z-index: 50 !important; /* High z-index to ensure visibility */
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  height: 24rem;
+  margin-bottom: 2rem;
+}
+
+.word-cloud-word {
+  position: absolute;
+  transition: all 1s ease;
+  z-index: 60 !important; /* Even higher z-index for words */
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Source colors */
+.word-source-instagram {
+  color: #e1306c;
+}
+
+.word-source-twitter {
+  color: #1da1f2;
+}
+
+.word-source-tiktok {
+  color: #000000;
+}
+
+.word-source-substack {
+  color: #ff6719;
+}
+
+.word-source-bluesky {
+  color: #0284c7;
+}
+
+/* Legend styles */
+.word-cloud-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+}
+
+.legend-dot {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.legend-dot-instagram {
+  background-color: #e1306c;
+}
+
+.legend-dot-twitter {
+  background-color: #1da1f2;
+}
+
+.legend-dot-tiktok {
+  background-color: #000000;
+}
+
+.legend-dot-substack {
+  background-color: #ff6719;
+}
+
+.legend-dot-bluesky {
+  background-color: #0284c7;
+}

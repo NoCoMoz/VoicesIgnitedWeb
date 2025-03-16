@@ -1,0 +1,162 @@
+// Admin Event Card component styles
+@import "../_variables.scss";
+
+.admin-event-card {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  .admin-event-card-content {
+    padding: 1.5rem;
+    flex: 1;
+  }
+  
+  .admin-event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    
+    h3 {
+      font-size: 1.25rem;
+      margin: 0;
+      color: $textColor;
+      flex: 1;
+    }
+    
+    .event-type-tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 99px;
+      text-transform: capitalize;
+      font-weight: 600;
+      margin-left: 0.5rem;
+      
+      &.meeting {
+        background-color: #e3f2fd;
+        color: #1565c0;
+      }
+      
+      &.workshop {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+      }
+      
+      &.action {
+        background-color: #fff8e1;
+        color: #f57c00;
+      }
+      
+      &.fundraiser {
+        background-color: #f3e5f5;
+        color: #7b1fa2;
+      }
+      
+      &.social {
+        background-color: #e8eaf6;
+        color: #3949ab;
+      }
+    }
+  }
+  
+  .admin-event-details {
+    .admin-event-description {
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    .admin-event-info {
+      p {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        
+        svg {
+          color: $purple;
+          width: 16px;
+          margin-right: 0.75rem;
+          flex-shrink: 0;
+        }
+        
+        span {
+          color: #444;
+        }
+      }
+    }
+  }
+  
+  .admin-event-actions {
+    display: flex;
+    border-top: 1px solid #eee;
+    
+    button {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      
+      svg {
+        margin-right: 0.5rem;
+      }
+      
+      &.btn-approve {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        
+        &:hover {
+          background-color: darken(#e8f5e9, 5%);
+        }
+      }
+      
+      &.btn-reject {
+        background-color: #ffebee;
+        color: #c62828;
+        
+        &:hover {
+          background-color: darken(#ffebee, 5%);
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .admin-event-card {
+    .admin-event-header {
+      flex-direction: column;
+      
+      .event-type-tag {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        align-self: flex-start;
+      }
+    }
+    
+    .admin-event-actions {
+      flex-direction: column;
+      
+      button {
+        padding: 1rem;
+      }
+    }
+  }
+}

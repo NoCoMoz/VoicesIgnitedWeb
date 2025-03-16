@@ -1,0 +1,170 @@
+.header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #3f2a56;
+  height: 6rem;
+  width: 100%;
+  position: relative;
+
+  // Border? Work on this
+  border-bottom: solid 1px;
+  border-color: #4f6070;
+  .logo {
+    margin-left: 1rem;
+    width: 20rem;
+    height: 3rem;
+  }
+  .links-container {
+    display: flex;
+    flex-direction: row;
+    color: white;
+    margin-right: 2rem;
+    .link {
+      color: white;
+      font-weight: 600;
+      margin: 1rem;
+    }
+  }
+}
+
+/* Remove underline for all anchor tags */
+a {
+  text-decoration: none;
+}
+
+/* Hamburger button styles */
+.hamburger-button {
+  display: none;
+  position: absolute;
+  right: 1.5rem;
+  top: 1.5rem;
+  background: rgba(63, 42, 86, 0.8); /* Semi-transparent background matching header color */
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 2000;
+  width: 30px;
+  height: 24px;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 4px; /* Rounded corners */
+
+  .hamburger-line {
+    display: block;
+    width: 100%;
+    height: 4px;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+    transform-origin: center;
+    margin-bottom: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.8), 0 0 0 1px #ffffff;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &.open {
+      &:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+      }
+      &:nth-child(2) {
+        opacity: 0;
+      }
+      &:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+    }
+  }
+}
+
+/* Mobile navigation menu */
+.mobile-nav {
+  display: none;
+  position: absolute;
+  top: 6rem;
+  left: 0;
+  right: 0;
+  background-color: #3f2a56;
+  flex-direction: column;
+  width: 100%;
+  z-index: 999;
+  transform: translateY(-150%);
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease;
+  opacity: 0;
+  padding: 1rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  &.open {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .link {
+    color: white;
+    font-weight: 600;
+    padding: 0.8rem 1.5rem;
+    text-align: center;
+    display: block;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+/* Utility class for hydration fix */
+.hidden {
+  display: none !important;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .header-container {
+    height: 6rem;
+    flex-direction: row; // Keep flex-direction row for logo and hamburger
+    padding: 0 1rem;
+    position: relative;
+    z-index: 1500;
+    
+    .logo {
+      width: 15rem; // Slightly smaller logo on mobile
+      height: auto;
+    }
+    
+    .links-container.desktop-nav {
+      display: none; // Hide desktop navigation on mobile
+    }
+  }
+  
+  .hamburger-button {
+    display: flex; // Show hamburger button on mobile
+    position: fixed; // Change to fixed positioning
+    top: 1.5rem;
+    right: 1.5rem;
+  }
+  
+  .mobile-nav {
+    display: flex; // Make mobile nav a flex container
+    z-index: 1999; // Increase z-index to ensure it appears above other elements
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 769px) {
+  .header-container {
+    display: flex;
+    flex-direction: column;
+    height: 7rem;
+    margin-right: 0;
+    .logo {
+      padding-top: 1rem;
+    }
+  }
+}

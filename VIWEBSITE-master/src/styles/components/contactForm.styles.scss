@@ -1,0 +1,56 @@
+.contact-form-container {
+  max-width: 1000px;
+  padding: 2rem;
+  background: rgb(63, 42, 86);
+  background: linear-gradient(
+    0deg,
+    rgba(63, 42, 86, 1) 0%,
+    rgba(99, 43, 99, 1) 100%
+  );
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.989);
+  h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #fcfafa;
+  }
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+  border-color: #dfcc4e; /* Focus border color */
+}
+
+.form-button {
+  display: flex;
+  justify-content: center;
+}
+
+/* Responsive Styling */
+@media (max-width: 600px) {
+}

@@ -1,0 +1,220 @@
+@import '../_variables.scss';
+
+.bluesky-feed {
+  background: linear-gradient(135deg, rgba($secondary-color, 0.1) 0%, rgba($secondary-color, 0.2) 100%);
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  color: $text-primary;
+  font-family: $font-family-base;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-lg;
+
+    h2 {
+      margin: 0;
+      font-size: $font-size-lg;
+      color: $primary-color;
+    }
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    color: $text-secondary;
+    font-size: $font-size-sm;
+  }
+
+  &__error {
+    background: rgba($error-color, 0.1);
+    border-left: 4px solid $error-color;
+    padding: $spacing-md;
+    margin: $spacing-sm 0;
+    border-radius: $border-radius-sm;
+
+    p {
+      margin: 0 0 $spacing-sm 0;
+      color: $error-color;
+    }
+  }
+
+  &__retry-button {
+    background: $error-color;
+    color: $text-primary;
+    border: none;
+    padding: $spacing-xs $spacing-md;
+    border-radius: $border-radius-sm;
+    cursor: pointer;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: darken($error-color, 10%);
+    }
+  }
+
+  &__posts {
+    display: flex;
+    gap: $spacing-lg;
+    overflow-x: auto;
+    padding: $spacing-sm 0;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: rgba($text-primary, 0.1);
+      border-radius: $border-radius-sm;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: $primary-color;
+      border-radius: $border-radius-sm;
+      
+      &:hover {
+        background: lighten($primary-color, 10%);
+      }
+    }
+  }
+
+  &__post {
+    flex: 0 0 300px;
+    background: rgba($text-primary, 0.05);
+    border-radius: $border-radius-md;
+    padding: $spacing-md;
+    transition: transform $transition-fast, box-shadow $transition-fast;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &__post-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+  }
+
+  &__post-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__post-author-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__post-org {
+    font-weight: bold;
+    color: $primary-color;
+  }
+
+  &__post-handle {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+  }
+
+  &__post-date {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__post-content {
+    margin-bottom: $spacing-md;
+
+    p {
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+
+  &__post-image {
+    width: 100%;
+    border-radius: $border-radius-md;
+    margin-top: $spacing-sm;
+  }
+
+  &__post-footer {
+    margin-top: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 1px solid rgba($text-primary, 0.1);
+  }
+
+  &__post-link {
+    color: $primary-color;
+    text-decoration: none;
+    font-size: $font-size-sm;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: lighten($primary-color, 10%);
+    }
+  }
+
+  &__navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: $spacing-md;
+    margin-top: $spacing-lg;
+  }
+
+  &__nav-button {
+    background: rgba($text-primary, 0.1);
+    border: none;
+    color: $text-primary;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: rgba($text-primary, 0.2);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__load-more {
+    background: $primary-color;
+    color: $text-primary;
+    border: none;
+    padding: $spacing-xs $spacing-lg;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    transition: background $transition-fast;
+
+    &:hover {
+      background: lighten($primary-color, 5%);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: wait;
+    }
+  }
+}
