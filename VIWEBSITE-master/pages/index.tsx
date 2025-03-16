@@ -8,6 +8,14 @@ interface Mission {
   content: string[];
 }
 
+// Use getStaticPaths to handle static generation
+export async function getStaticPaths() {
+  return {
+    paths: [{ params: {} }], // Include the index route
+    fallback: false, // Show 404 for non-existent paths
+  };
+}
+
 // Use getStaticProps instead of getServerSideProps for static export
 export async function getStaticProps() {
   try {

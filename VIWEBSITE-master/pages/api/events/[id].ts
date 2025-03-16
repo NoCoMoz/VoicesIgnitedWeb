@@ -1,70 +1,120 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { Event, EventResponse } from '../../../types/event';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { connectToDatabase } from '../../../utils/db';
+import Event from '../../../models/Event';
 
-// Static events data
-const events: Event[] = [
+// Sample event data for fallback
+const sampleEvents = [
   {
-    title: "Community Meeting",
-    description: "Monthly community gathering to discuss local issues",
-    date: new Date("2025-04-01").toISOString(),
-    location: "Community Center",
-    type: "meeting"
+    _id: '1',
+    title: "Monthly Planning Meeting",
+    description: "Join us for our monthly planning meeting where we'll discuss upcoming initiatives and events.",
+    date: new Date(2024, new Date().getMonth(), 15),
+    startTime: "18:30",
+    endTime: "20:00",
+    type: "meeting",
+    locationType: "online",
+    location: "Zoom (link will be sent after registration)",
+    organizer: "Voices Ignited Core Team",
+    contactEmail: "info@voicesignited.org",
+    approved: true,
   },
   {
-    title: "Fundraising Event",
-    description: "Annual fundraiser for local initiatives",
-    date: new Date("2025-05-15").toISOString(),
-    location: "Town Hall",
-    type: "fundraiser"
+    _id: '2',
+    title: "Community Outreach Workshop",
+    description: "Learn effective strategies for community engagement and grassroots organizing.",
+    date: new Date(2024, new Date().getMonth(), 20),
+    startTime: "14:00",
+    endTime: "16:00",
+    type: "workshop",
+    locationType: "hybrid",
+    location: "Community Center + Zoom",
+    organizer: "Outreach Team",
+    contactEmail: "outreach@voicesignited.org",
+    approved: true,
   }
 ];
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<EventResponse>
+  res: NextApiResponse
 ) {
+  const { id } = req.query;
+
+  if (!id || Array.isArray(id)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid event ID'
+    });
+  }
+
+  // Try to connect to database first
   try {
-    const { id } = req.query;
-    if (!id) {
-      return res.status(400).json({
-        success: false,
-        message: 'Event ID is required'
+    await connectToDatabase();
+  } catch (dbError) {
+    console.warn('Database connection failed, using sample data:', dbError);
+    // Return sample event if ID matches
+    const sampleEvent = sampleEvents.find(event => event._id === id);
+    if (sampleEvent) {
+      return res.status(200).json({
+        success: true,
+        data: sampleEvent,
+        message: 'Using sample data due to database unavailability'
       });
     }
+    return res.status(404).json({
+      success: false,
+      message: 'Event not found in sample data'
+    });
+  }
 
-    const eventId = Array.isArray(id) ? id[0] : id;
-    const eventIndex = parseInt(eventId);
-
-    if (isNaN(eventIndex) || eventIndex < 0 || eventIndex >= events.length) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid event ID'
-      });
-    }
-
+  try {
     switch (req.method) {
       case 'GET':
+        const event = await Event.findById(id);
+        if (!event) {
+          // If no event found in DB, check sample data
+          const sampleEvent = sampleEvents.find(event => event._id === id);
+          if (sampleEvent) {
+            return res.status(200).json({
+              success: true,
+              data: sampleEvent,
+              message: 'Using sample data as event not found in database'
+            });
+          }
+          return res.status(404).json({
+            success: false,
+            message: 'Event not found'
+          });
+        }
         return res.status(200).json({
           success: true,
-          message: 'Event retrieved successfully',
-          data: events[eventIndex]
+          data: event
         });
 
       case 'PUT':
-        const updatedEvent = {
-          ...events[eventIndex],
-          ...req.body,
-          date: new Date(req.body.date).toISOString()
-        };
-        events[eventIndex] = updatedEvent;
+        const updatedEvent = await Event.findByIdAndUpdate(id, req.body, {
+          new: true,
+          runValidators: true
+        });
+        if (!updatedEvent) {
+          return res.status(404).json({
+            success: false,
+            message: 'Event not found'
+          });
+        }
         return res.status(200).json({
           success: true,
-          message: 'Event updated successfully',
           data: updatedEvent
         });
 
       case 'DELETE':
-        events.splice(eventIndex, 1);
+        const deletedEvent = await Event.findByIdAndDelete(id);
+        if (!deletedEvent) {
+          return res.status(404).json({
+            success: false,
+            message: 'Event not found'
+          });
+        }
         return res.status(200).json({
           success: true,
           message: 'Event deleted successfully'
@@ -73,14 +123,26 @@ export default async function handler(
       default:
         return res.status(405).json({
           success: false,
-          message: 'Method not allowed'
+          message: `Method ${req.method} not allowed`
         });
     }
   } catch (error) {
-    console.error('Error handling event request:', error);
+    console.error('Error in event API:', error);
+    // For GET requests, try sample data as fallback
+    if (req.method === 'GET') {
+      const sampleEvent = sampleEvents.find(event => event._id === id);
+      if (sampleEvent) {
+        return res.status(200).json({
+          success: true,
+          data: sampleEvent,
+          message: 'Using sample data due to error'
+        });
+      }
+    }
     return res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 }
