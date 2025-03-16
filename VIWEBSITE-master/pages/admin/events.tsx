@@ -9,6 +9,43 @@ import { faExclamationTriangle, faCheck, faTimes } from '@fortawesome/free-solid
 import '@/styles/admin-events.css';
 import AdminLogin from '@/components/Admin/AdminLogin';
 
+// Sample event data for development
+const samplePendingEvents: EventType[] = [
+  {
+    id: '3',
+    title: "Climate Justice Rally",
+    description: "Stand with us as we rally for climate justice and environmental protection policies.",
+    date: new Date(2024, new Date().getMonth() + 1, 5),
+    startTime: "10:00",
+    endTime: "13:00",
+    type: "action",
+    locationType: "in-person",
+    location: "City Hall Plaza",
+    organizer: "Direct Action Committee",
+    contactEmail: "action@voicesignited.org",
+    imageUrl: "/images/events/climate-rally.jpg",
+    approved: false,
+  }
+];
+
+// Use getStaticPaths for static generation
+export async function getStaticPaths() {
+  return {
+    paths: [{ params: {} }], // Include the admin/events route
+    fallback: false, // Show 404 for non-existent paths
+  };
+}
+
+// Use getStaticProps for initial data
+export async function getStaticProps() {
+  return {
+    props: {
+      initialPendingEvents: samplePendingEvents,
+      initialApprovedEvents: [], // Start with empty approved events
+    },
+  };
+}
+
 /**
  * Admin Events Page
  * 
@@ -17,12 +54,18 @@ import AdminLogin from '@/components/Admin/AdminLogin';
  * - Approve or reject submitted events
  * - Manage existing events
  */
-const AdminEventsPage: React.FC = () => {
+const AdminEventsPage = ({ 
+  initialPendingEvents,
+  initialApprovedEvents 
+}: { 
+  initialPendingEvents: EventType[],
+  initialApprovedEvents: EventType[]
+}) => {
   const [isClient, setIsClient] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [pendingEvents, setPendingEvents] = useState<EventType[]>([]);
-  const [approvedEvents, setApprovedEvents] = useState<EventType[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [pendingEvents, setPendingEvents] = useState<EventType[]>(initialPendingEvents);
+  const [approvedEvents, setApprovedEvents] = useState<EventType[]>(initialApprovedEvents);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [adminName, setAdminName] = useState<string>('');
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
@@ -104,6 +147,12 @@ const AdminEventsPage: React.FC = () => {
     } catch (err: any) {
       console.error('Failed to fetch events:', err);
       setError('Failed to load events. Please try again.');
+      
+      // Use sample data in development
+      if (process.env.NODE_ENV === 'development') {
+        setPendingEvents(initialPendingEvents);
+        setApprovedEvents(initialApprovedEvents);
+      }
     } finally {
       setLoading(false);
     }
@@ -112,8 +161,7 @@ const AdminEventsPage: React.FC = () => {
   // Handle event approval
   const handleApprove = async (eventId: string) => {
     try {
-      await axios.put(`/api/events/${eventId}`, {
-        action: 'approve',
+      await axios.put(`/api/events/${eventId}/approve`, {
         adminName: adminName || 'Admin'
       });
       
@@ -137,8 +185,7 @@ const AdminEventsPage: React.FC = () => {
   // Handle event rejection
   const handleReject = async (eventId: string) => {
     try {
-      await axios.put(`/api/events/${eventId}`, {
-        action: 'reject',
+      await axios.put(`/api/events/${eventId}/reject`, {
         adminName: adminName || 'Admin'
       });
       
@@ -158,9 +205,6 @@ const AdminEventsPage: React.FC = () => {
       setError('Failed to reject event. Please try again.');
     }
   };
-
-  // Don't render anything during server-side rendering to prevent hydration mismatch
-  if (!isClient) return null;
 
   // If not authenticated, show login form
   if (!isAuthenticated) {
@@ -206,89 +250,49 @@ const AdminEventsPage: React.FC = () => {
           <div className="error-message">
             <FontAwesomeIcon icon={faExclamationTriangle} /> {error}
             <button onClick={fetchEvents} className="btn-retry">
-              Try Again
+              Retry
             </button>
           </div>
         )}
 
-        <div className="admin-name-input">
-          <label htmlFor="adminName">Your Name (for approval records):</label>
-          <input
-            type="text"
-            id="adminName"
-            value={adminName}
-            onChange={(e) => setAdminName(e.target.value)}
-            placeholder="Enter your name"
-          />
+        <div className="events-section">
+          <h2>Pending Events</h2>
+          {loading ? (
+            <div className="loading">Loading events...</div>
+          ) : pendingEvents.length > 0 ? (
+            <div className="events-grid">
+              {pendingEvents.map((event) => (
+                <AdminEventCard
+                  key={event.id}
+                  event={event}
+                  onApprove={() => handleApprove(event.id)}
+                  onReject={() => handleReject(event.id)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="no-events">No pending events to review</div>
+          )}
         </div>
 
-        <section className="pending-events-section">
-          <h2>Pending Events ({pendingEvents.length})</h2>
-          
-          {loading ? (
-            <div className="loading-container">
-              <div className="loading-spinner"></div>
-              <p>Loading pending events...</p>
-            </div>
-          ) : (
-            <>
-              {pendingEvents.length === 0 ? (
-                <div className="no-events-message">
-                  <p>No pending events require approval.</p>
-                </div>
-              ) : (
-                <div className="pending-events-list">
-                  {pendingEvents.map((event) => (
-                    <AdminEventCard
-                      key={event._id as string}
-                      event={event}
-                      onApprove={() => handleApprove(event._id as string)}
-                      onReject={() => handleReject(event._id as string)}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-        </section>
-
-        <section className="recent-approved-events">
+        <div className="events-section">
           <h2>Recently Approved Events</h2>
-          
           {loading ? (
-            <div className="loading-container">
-              <div className="loading-spinner"></div>
-              <p>Loading approved events...</p>
+            <div className="loading">Loading events...</div>
+          ) : approvedEvents.length > 0 ? (
+            <div className="events-grid">
+              {approvedEvents.map((event) => (
+                <AdminEventCard
+                  key={event.id}
+                  event={event}
+                  isApproved
+                />
+              ))}
             </div>
           ) : (
-            <>
-              {approvedEvents.length === 0 ? (
-                <div className="no-events-message">
-                  <p>No approved events found.</p>
-                </div>
-              ) : (
-                <div className="approved-events-list">
-                  {approvedEvents.map((event) => (
-                    <div key={event._id as string} className="approved-event-card">
-                      <h3>{event.title}</h3>
-                      <p className="event-date">
-                        {new Date(event.date).toLocaleDateString()}
-                        {' • '}
-                        {event.startTime} - {event.endTime}
-                      </p>
-                      <p className="approval-info">
-                        Approved by: {event.approvedBy || 'Unknown'}
-                        {event.approvedAt && (
-                          <> on {new Date(event.approvedAt).toLocaleDateString()}</>
-                        )}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </>
+            <div className="no-events">No recently approved events</div>
           )}
-        </section>
+        </div>
       </div>
     </>
   );
