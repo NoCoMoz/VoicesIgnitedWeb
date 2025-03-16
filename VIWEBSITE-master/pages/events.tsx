@@ -15,23 +15,71 @@ interface MongoEventResponse extends Omit<EventType, 'id' | 'date'> {
   date: string;
 }
 
+// Sample event data (used as fallback if API fails)
+const sampleEvents: EventType[] = [
+  {
+    id: '1',
+    title: "Monthly Planning Meeting",
+    description: "Join us for our monthly planning meeting where we'll discuss upcoming initiatives and events.",
+    date: new Date(2024, new Date().getMonth(), 15),
+    startTime: "18:30",
+    endTime: "20:00",
+    type: "meeting",
+    locationType: "online",
+    location: "Zoom (link will be sent after registration)",
+    organizer: "Voices Ignited Core Team",
+    contactEmail: "info@voicesignited.org",
+    approved: true,
+  },
+  {
+    id: '2',
+    title: "Community Outreach Workshop",
+    description: "Learn effective strategies for community engagement and grassroots organizing.",
+    date: new Date(2024, new Date().getMonth(), 20),
+    startTime: "14:00",
+    endTime: "16:00",
+    type: "workshop",
+    locationType: "hybrid",
+    location: "Community Center + Zoom",
+    organizer: "Outreach Team",
+    contactEmail: "outreach@voicesignited.org",
+    approved: true,
+  }
+];
+
+// Use getStaticPaths for static generation
+export async function getStaticPaths() {
+  return {
+    paths: [{ params: {} }], // Include the events route
+    fallback: false, // Show 404 for non-existent paths
+  };
+}
+
+// Use getStaticProps for initial data
+export async function getStaticProps() {
+  return {
+    props: {
+      initialEvents: sampleEvents,
+    },
+  };
+}
+
 /**
  * Events page component for Voices Ignited
  * Displays upcoming and past events with calendar and list views
  */
-const Events = () => {
+const Events = ({ initialEvents }: { initialEvents: EventType[] }) => {
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
-  const [events, setEvents] = useState<EventType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [events, setEvents] = useState<EventType[]>(initialEvents);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   // Fix for hydration issues - only render dynamic content after client-side hydration
   useEffect(() => {
     setIsClient(true);
-
-    // Fetch events from API after client-side hydration
+    // Fetch fresh events from API after client-side hydration
     if (isClient) {
       fetchEvents();
     }
@@ -107,9 +155,6 @@ const Events = () => {
     }
   };
 
-  // Don't render anything during server-side rendering to prevent hydration mismatch
-  if (!isClient) return null;
-
   return (
     <div className="events-page">
       <Head>
@@ -182,81 +227,5 @@ const Events = () => {
     </div>
   );
 };
-
-// Sample event data (used as fallback if API fails)
-const sampleEvents: EventType[] = [
-  {
-    id: '1',
-    title: "Monthly Planning Meeting",
-    description: "Join us for our monthly planning meeting where we'll discuss upcoming initiatives and events.",
-    date: new Date(2023, new Date().getMonth(), 15),
-    startTime: "18:30",
-    endTime: "20:00",
-    type: "meeting",
-    locationType: "online",
-    location: "Zoom (link will be sent after registration)",
-    organizer: "Voices Ignited Core Team",
-    contactEmail: "info@voicesignited.org",
-    approved: true,
-  },
-  {
-    id: '2',
-    title: "Community Outreach Workshop",
-    description: "Learn effective strategies for community outreach and engagement.",
-    date: new Date(2023, new Date().getMonth(), 22),
-    startTime: "14:00",
-    endTime: "16:30",
-    type: "workshop",
-    locationType: "in-person",
-    location: "Community Center, 123 Main St.",
-    organizer: "Education Committee",
-    contactEmail: "education@voicesignited.org",
-    approved: true,
-  },
-  {
-    id: '3',
-    title: "Climate Justice Rally",
-    description: "Stand with us as we rally for climate justice and environmental protection policies.",
-    date: new Date(2023, new Date().getMonth() + 1, 5),
-    startTime: "10:00",
-    endTime: "13:00",
-    type: "action",
-    locationType: "in-person",
-    location: "City Hall Plaza",
-    organizer: "Direct Action Committee",
-    contactEmail: "action@voicesignited.org",
-    imageUrl: "/images/events/climate-rally.jpg",
-    approved: true,
-  },
-  {
-    id: '4',
-    title: "Annual Fundraising Gala",
-    description: "Our biggest fundraising event of the year with dinner, speakers, and entertainment.",
-    date: new Date(2023, new Date().getMonth() + 1, 18),
-    startTime: "18:00",
-    endTime: "22:00",
-    type: "fundraiser",
-    locationType: "in-person",
-    location: "Grand Hotel Ballroom, 500 Park Ave",
-    organizer: "Fundraising Committee",
-    contactEmail: "fundraising@voicesignited.org",
-    imageUrl: "/images/events/gala.jpg",
-    approved: true,
-  },
-  {
-    id: '5',
-    title: "Community Potluck",
-    description: "Bring your favorite dish and meet fellow activists in a casual setting.",
-    date: new Date(2023, new Date().getMonth(), 28),
-    startTime: "17:00",
-    endTime: "20:00",
-    type: "social",
-    locationType: "in-person",
-    location: "Riverside Park Pavilion",
-    organizer: "Community Building Committee",
-    contactEmail: "community@voicesignited.org",
-    approved: true,
-  }
-];
 
 export default Events;
